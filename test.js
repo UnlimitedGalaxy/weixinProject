@@ -4,25 +4,31 @@ const service = require('koa-static');
 const fs = require('fs');
 const koaBody = require('koa-body');
 
-const handler = async (ctx, next) => {
-	try {
-		await next();
-	} catch (err) {
-		ctx.response.status = err.statusCode || err.status || 500;
-		ctx.response.body = {
-			message: err.message
-		};
-	}
+const asyncFun = async function() {
+	return new Promise((resolve => setTimeout(() => resolve(), 2000)));
+}
+
+const one = async function(ctx, next) {
+	ctx.body = 'start ';
+	await next();
 };
 
-const main = async function(ctx) {
-	const body = ctx.request.body;
-	if (!body.name) ctx.throw(400, '.name required');
-	ctx.body = { name: body.name };
+const two = async function(ctx, next) {
+	ctx.body = ctx.body + 'middle ';
+	await asyncFun();
+	console.log('hello');
+	next();
 };
 
-app.use(koaBody());
-app.use(handler);
-app.use(main);
+const three = async function(ctx, next) {
+	ctx.body = ctx.body + 'end ';
+	console.log('hello end');
+	next();
+};
+
+app.use(one);
+app.use(two);
+app.use(three);
+
 console.log('listen on 3000');
 app.listen(3000);
