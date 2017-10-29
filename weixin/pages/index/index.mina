@@ -1,7 +1,13 @@
 <template lang='pug'>
 	view.container
-	  view.userinfo(bindtap='bindViewTap')
-			text.userInfo-nickname {{userInfo.nickname}}
+      view.userInfo(bindTap='bindViewTap')
+        button(wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo")
+          | 获取头像昵称
+        block(wx:else)
+        image.userinfo-avatar(bindtap="bindViewTap" src="{{userInfo.avatarUrl}}" background-size="cover")
+        text.userinfo-nickname {{userInfo.nickName}}
+      view.usermotto
+        text.user-motto {{motto}}
 </template>
 
 <script>
