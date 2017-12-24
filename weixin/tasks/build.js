@@ -3,7 +3,7 @@ require('shelljs/global');
 const webpack = require('webpack');
 const fs = require('fs');
 const _ = require('lodash');
-const { resolve } = require('path');
+const { resolve, } = require('path');
 
 const r = url => resolve(process.cwd(), url);
 
@@ -29,7 +29,7 @@ renderConf.entry.app = config.app;
 renderConf.output = {
 	path: r('./mina'),
 	filename: '[name].js',
-}
+};
 
 var compiler = webpack(renderConf);
 
@@ -45,5 +45,5 @@ compiler.watch({
 		children: true,
 		chunks: true,
 		chunkModules: true,
-	}) + '\n\n')
+	}) + '\n\n');
 });

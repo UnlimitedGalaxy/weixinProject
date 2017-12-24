@@ -1,4 +1,5 @@
-import './'
+import './style/bass.sass';
+import './vender';
 //app.js
 App({
   onLaunch: function () {

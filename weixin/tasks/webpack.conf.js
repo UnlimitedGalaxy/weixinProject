@@ -14,86 +14,88 @@ const extractSass = new ExtractTextPlugin({
 })
 
 const r = url =>
-module.exports = {
-	devtool: false,
-	output: {
-		path: r('./mina'),
-		filename: '[name].js',
-	},
-	resolve: {
-		alias: {
-			utils: r('../utils/util')
+	module.exports = {
+		devtool: false,
+		output: {
+			path: r('./mina'),
+			filename: '[name].js',
 		},
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-				options: {
-					presets: {
-						'env': {
-							modules: false
-						}
-					}
-				}
+		resolve: {
+			alias: {
+				utils: r('../utils/util')
 			},
-			{
-				test: /\.sass$/,
-				use: extractSass.extract({
-					use: [
-						{loader: 'css-loader'},
-						{
-							loader: 'postcss-loader',
-							options: {
-								plugins: (loader) => [
-									require('autoprefixer')({
-										browsers: [
-											'last 2 versions',
-										]
-									})
-								]
+		},
+		module: {
+			rules: [
+				{
+					test: /\.js$/,
+					loader: 'babel-loader',
+					exclude: /node_modules/,
+					options: {
+						presets: [
+							{
+								'env': {
+									modules: false
+								}
 							}
-						},
-						{
-							loader: 'sass-loader',
-							options: {
-								indentedSyntax: true,
+						]
+					}
+				},
+				{
+					test: /\.sass$/,
+					use: extractSass.extract({
+						use: [
+							{ loader: 'css-loader' },
+							{
+								loader: 'postcss-loader',
+								options: {
+									plugins: (loader) => [
+										require('autoprefixer')({
+											browsers: [
+												'last 2 versions',
+											]
+										})
+									]
+								}
 							},
-						},
-					],
-					fallback: 'style-loader',
-				})
-			},
-			{
-				test: /\.mina$/,
-				loader: 'wechat-mina-loader',
-				options: {
-					path: r('../'),
-					dist: './mina',
+							{
+								loader: 'sass-loader',
+								options: {
+									indentedSyntax: true,
+								},
+							},
+						],
+						fallback: 'style-loader',
+					})
 				},
-			},
-		],
-	},
-	plugins: [
-		extractSass,
-		new CopyWebpackPlugin([
-			{
-				from: {
-					glob: 'pages/**/*.json',
+				{
+					test: /\.mina$/,
+					loader: 'wechat-mina-loader',
+					options: {
+						path: r('../'),
+						dist: './mina',
+					},
 				},
-				to: '',
-			},
-			{
-				from: 'static',
-				to: 'static',
-			},
-		]),
-		new webpack.optimize.ModuleConcatenationPlugin(),
-		new webpack.optimize.UglifyJsPlugin({
-			souceMap: false,
-		}),
-		new ProgressBarPlugin(),
-	]
-}
+			],
+		},
+		plugins: [
+			extractSass,
+			new CopyWebpackPlugin([
+				{
+					from: {
+						glob: 'pages/**/*.json',
+					},
+					to: '',
+				},
+				{
+					from: 'static',
+					to: 'static',
+				},
+			]),
+			new webpack.optimize.ModuleConcatnationPlugin(),
+			new webpack.optimize.UglifyJsPlugin({
+				souceMap: false,
+			}),
+			new ProgressBarPlugin(),
+		]
+	}
